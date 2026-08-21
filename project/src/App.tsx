@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Compass, Map, ShoppingBag, Sparkles, Menu, X } from 'lucide-react';
 import Hero from '@/components/Hero';
-import FeaturedDestinations from '@/components/FeaturedDestinations';
+import DestinationsExplorer from '@/components/DestinationsExplorer';
 import RoutePlanner from '@/components/RoutePlanner';
 import Marketplace from '@/components/Marketplace';
 import Chatbot from '@/components/Chatbot';
+import SOSWidget from '@/components/SOSWidget';
+import type { Destination } from '@/data/destinations';
 
 type Tab = 'home' | 'planner' | 'marketplace';
 
@@ -22,6 +24,13 @@ export default function App() {
 
   const handleCitySelect = (cityId: string) => {
     setSelectedCityId(cityId);
+    setActiveTab('planner');
+    setTimeout(() => {
+      document.getElementById('route-planner')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
+  const handleAddDestinationToItinerary = (_destination: Destination) => {
     setActiveTab('planner');
     setTimeout(() => {
       document.getElementById('route-planner')?.scrollIntoView({ behavior: 'smooth' });
@@ -131,7 +140,7 @@ export default function App() {
         <Hero onCitySelect={handleCitySelect} onExplore={handleExplore} />
 
         <div id="destinations">
-          <FeaturedDestinations onCitySelect={handleCitySelect} />
+          <DestinationsExplorer onAddToItinerary={handleAddDestinationToItinerary} />
         </div>
 
         <RoutePlanner selectedCityId={selectedCityId} />
@@ -191,6 +200,9 @@ export default function App() {
 
       {/* Floating AI Chatbot */}
       <Chatbot />
+
+      {/* Floating SOS Emergency Widget */}
+      <SOSWidget />
     </div>
   );
 }
